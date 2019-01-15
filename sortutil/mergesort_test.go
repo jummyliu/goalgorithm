@@ -1,23 +1,20 @@
 package sortutil
 
-import "testing"
+import (
+	"testing"
+	"math/rand"
+	"sort"
+)
 
-var arr = []struct {
+var arr []struct {
 	input, want []int
-}{
-	{
-		input: []int{6, 202, 100, 301, 38, 8, 1},
-		want:  []int{1, 6, 8, 38, 100, 202, 301},
-	},
-	{
-		input: []int{1},
-		want:  []int{1},
-	},
-	{
-		input: []int{},
-		want:  []int{},
-	},
 }
+
+type MyInt []int
+
+func (a MyInt) Len() int { return len(a) }
+func (a MyInt) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a MyInt) Less(i, j int) bool { return a[i] < a[j] }
 
 // TestMergeSortRecursive
 func TestMergeSortRecursive(t *testing.T) {
@@ -50,4 +47,21 @@ func compare(a, b []int) bool {
 		}
 	}
 	return true
+}
+
+func init() {
+	r := rand.New(rand.NewSource(99))
+	count := r.Intn(99)
+	arr = make([]struct {
+		input, want []int
+	}, count)
+	for i := range arr {
+		size := r.Intn(9999)
+		arr[i].input = make([]int, size)
+		for j := range arr[i].input {
+			arr[i].input[j] = r.Intn(9999)
+		}
+		arr[i].want = arr[i].input
+		sort.Sort(MyInt(arr[i].want))
+	}
 }

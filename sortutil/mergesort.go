@@ -55,9 +55,12 @@ func MergeSort(arr []int) []int {
 				end = arrLen
 			}
 			subarr := arr[begin:end]
-			left := subarr[:length]
-			right := subarr[length:]
-			newArr = append(newArr, merge(left, right)...)
+			if length <= len(subarr) {
+				left := subarr[:length]
+				right := subarr[length:]
+				subarr = merge(left, right)
+			}
+			newArr = append(newArr, subarr...)
 		}
 		arr = newArr
 	}
